@@ -1,0 +1,187 @@
+{
+  "schema": "native-v1",
+  "mode": "accuracy",
+  "purpose": "paper-native-terminal-bench-lite",
+  "benchmarks": [
+    "tb_lite"
+  ],
+  "scheduling": "parallel",
+  "harnesses": [
+    "pi",
+    "deepagents",
+    "deepseek",
+    "terminus-2",
+    "mini-swe-agent"
+  ],
+  "interfaces": [
+    "native"
+  ],
+  "harness_profiles": {
+    "deepagents": {
+      "context_reserve_tokens": 1024,
+      "context_policy": "summarize before input plus maximum output can reach the served 65536-token context window",
+      "context_overflow_mapping": "map vLLM/OpenAI context-limit BadRequestError to ContextOverflowError; if an approximate proactive summary still exceeds the exact provider limit, apply DeepAgents native overflow-tail clipping and retry once"
+    },
+    "terminus-2": {
+      "version": "harbor==0.22.0",
+      "entrypoint": "harbor.agents.terminus_2.terminus_2.Terminus2",
+      "options": {
+        "parser_name": "json",
+        "enable_summarize": true,
+        "proactive_summarization_threshold": 8000,
+        "record_terminal_session": true,
+        "tmux_pane_width": 160,
+        "tmux_pane_height": 40,
+        "interleaved_thinking": false,
+        "store_all_messages": true
+      },
+      "tools": "ordered tmux keystrokes, durations, task_complete; native summary subagents",
+      "setup": "official TmuxSession installation of tmux/asciinema in the task container",
+      "hrp_limitation": "frozen model requests only; running tmux/process state is not restored",
+      "permissions": "task agent user; official tool setup may use root; no additional MCP servers or skills"
+    },
+    "mini-swe-agent": {
+      "version": "2.4.6",
+      "repository": "https://github.com/SWE-agent/mini-swe-agent.git",
+      "commit": "a83fcae82d2a08f0ee0c688f9d137b3566c097f8",
+      "entrypoint": "minisweagent.agents.default.DefaultAgent",
+      "config": "agents/mini-swe-agent/src/minisweagent/config/mini.yaml",
+      "tools": "official LitellmModel bash schema and LocalEnvironment inside benchmark container",
+      "changes": "unattended DefaultAgent without CLI confirmation; step/time caps overridden; dollar cap disabled for local model; cost_tracking=ignore_errors, wire token costs retained",
+      "permissions": "task agent user; subshell per action; no delegation or context summarizer in DefaultAgent",
+      "hrp_limitation": "frozen next model request; no running subprocess restoration"
+    }
+  },
+  "repeats": 3,
+  "seed": 42,
+  "datasets": {
+    "tb_lite": {
+      "repository": "https://github.com/laude-institute/terminal-bench-lite.git",
+      "commit": "4e2740540609ed469e33f37464cefeb8c970155e",
+      "path": "environment/terminal_bench/tb_lite",
+      "tasks_dir": ".",
+      "task_count": 39
+    }
+  },
+  "image_preparation": {
+    "manifest": "environment/terminal_bench/images.json",
+    "regctl": "regctl",
+    "oci_cache": ".cache/hrp/terminal-images",
+    "download_attempts": 8,
+    "download_timeout_sec": 7200,
+    "build_workers": 3,
+    "build_timeout_sec": 3600
+  },
+  "target": {
+    "id": "qwen3.5-9b",
+    "checkpoint": "models/Qwen3.5-9B",
+    "backend": "openai-compatible",
+    "api_base": "http://127.0.0.1:8010/v1",
+    "temperature": 0.6,
+    "max_tokens": 32768,
+    "context_window": 65536,
+    "enable_thinking": true
+  },
+  "teacher": {
+    "id": "openai/gpt-5.6-luna",
+    "backend": "openrouter",
+    "api_base": "https://openrouter.ai/api/v1",
+    "temperature": null,
+    "max_tokens": 32768,
+    "context_window": 65536,
+    "reasoning_effort": "medium"
+  },
+  "timeout_policy": "benchmark_default",
+  "budget": {
+    "max_steps": 50,
+    "max_model_calls": null,
+    "max_output_tokens": null,
+    "wall_time_sec": null
+  },
+  "hrp": {
+    "measurement_scope": "frozen_native_request; execution semantics require separate evidence",
+    "capture_filesystem_snapshots": false,
+    "n_target": 128,
+    "n_teacher": 64,
+    "steps": "all model-call boundaries including subagents, retries and summaries",
+    "sampling_schedule": "proportional_interleaved_v1",
+    "discovery_fraction": 0.25,
+    "gamma": 0.95,
+    "tau": 0.1,
+    "alpha": 0.5,
+    "min_pair_count": 3,
+    "sampling_budget": {
+      "max_model_calls": 8,
+      "max_output_tokens": 262144,
+      "wall_time_sec": 1200
+    },
+    "outcome_calibration": null
+  },
+  "concurrency": {
+    "outer_runs": 9,
+    "tasks_per_run": 8,
+    "local_requests": 72,
+    "teacher_requests": 32,
+    "native_sample_workers": 40,
+    "containers": 72,
+    "evaluators": 3
+  },
+  "provider_retry": {
+    "openrouter_max_retries": 10,
+    "initial_delay_sec": 1.0,
+    "max_delay_sec": 30.0,
+    "retryable_http_statuses": [
+      408,
+      409,
+      425,
+      429,
+      "5xx"
+    ],
+    "retryable_transport_errors": [
+      "connection",
+      "TLS reset",
+      "payload",
+      "timeout"
+    ]
+  },
+  "progress_interval_sec": 3600,
+  "runtime": {
+    "node": "node",
+    "python": "python",
+    "gpu_ids": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "tensor_parallel_size": 1,
+    "data_parallel_size": 4,
+    "dtype": "bfloat16",
+    "gpu_memory_utilization": 0.94,
+    "max_num_seqs_per_rank": 12,
+    "max_num_batched_tokens": 16384,
+    "prefix_caching": true,
+    "chunked_prefill": true,
+    "watermark": 0.05,
+    "numa_bind": true,
+    "language_model_only": true,
+    "generation": {
+      "top_p": 0.95,
+      "top_k": 20,
+      "min_p": 0.0,
+      "repetition_penalty": 1.0
+    },
+    "reasoning_parser": "qwen3",
+    "tool_call_parser": "qwen3_coder"
+  },
+  "network": {
+    "terminal_cidr": "10.244.0.0/16",
+    "task_network": "benchmark task public network",
+    "apt_sources": "unchanged from pinned task image; historical Debian-bookworm mount is not applied",
+    "persistent_env": {
+      "UV_INSTALLER_GITHUB_BASE_URL": "https://ghfast.top/https://github.com",
+      "UV_PYTHON_INSTALL_MIRROR": "https://ghfast.top/https://github.com/astral-sh/python-build-standalone/releases/download"
+    },
+    "credentials_and_answers": "no host credentials, gold patches or grading datasets mounted in generation"
+  }
+}

@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hrp-controlled-miniwob"
+version = "0.1.0"
+description = "Executable MiniWoB tasks with finite semantic actions and exact HRP oracles"
+requires-python = ">=3.12"
+dependencies = ["numpy>=2,<3", "playwright>=1.50,<2"]
+
+[project.scripts]
+hrp-miniwob = "hrp_miniwob.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["hrp_miniwob*"]
+
+[tool.setuptools.package-data]
+hrp_miniwob = ["upstream.json"]
+"hrp_miniwob.v2" = ["upstream.json"]

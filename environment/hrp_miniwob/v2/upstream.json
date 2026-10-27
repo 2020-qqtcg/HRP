@@ -1,0 +1,31 @@
+{
+  "repository": "https://github.com/Farama-Foundation/miniwob-plusplus",
+  "revision": "33c3b4ddef8c6eb67c57a29663d844b1eda7e614",
+  "raw_url": "https://raw.githubusercontent.com/Farama-Foundation/miniwob-plusplus",
+  "task_version": "v2",
+  "tasks": [
+    "click-checkboxes",
+    "click-checkboxes-soft",
+    "ascending-numbers"
+  ],
+  "files": {
+    "LICENSE": "fd6529fb8f648d4130fd969e3d7fc740c9992a0bd94a1998f52555a873311511",
+    "miniwob/html/common/ui_utils.js": "65301ee11f483df7e9114f3fac2e2938e8b56933fecbed36bce310e2d8d90368",
+    "miniwob/html/core/core.css": "795f8e686125b71e89a21ffe9e03406c6498f1e135175ba63321f3051a720042",
+    "miniwob/html/core/core.js": "db8f489ab947a3194b99e718bce5e59ea9aaf0a3c35410d8c9c79e56e6123d14",
+    "miniwob/html/core/d3.v3.min.js": "8ca4da6691fb142cd76283014e887e7c3e61e3b63eff9ebb08eeb5c51d56aafb",
+    "miniwob/html/core/jquery-ui/external/jquery/jquery.js": "430f36f9b5f21aae8cc9dca6a81c4d3d84da5175eaedcf2fdc2c226302cb3575",
+    "miniwob/html/core/jquery-ui/images/ui-icons_444444_256x240.png": "eaf7c7ee2747275dda6c53e731a10db1a7b15f4fbb46e1b69d6bb2056bc9fd81",
+    "miniwob/html/core/jquery-ui/images/ui-icons_555555_256x240.png": "5d04051dfd9d2d740355404f98a683d1ec0feb2fca7d76e533c1a6e5ce92dd2e",
+    "miniwob/html/core/jquery-ui/images/ui-icons_777620_256x240.png": "9dbe4a0d03feed6f65eb2560a0a8b4ba4264545ee8fd31c1763a3b219d0328d6",
+    "miniwob/html/core/jquery-ui/images/ui-icons_777777_256x240.png": "e75b27211e16fcf94715168001bb7055ca376d46f928110ba3d0825232452e5a",
+    "miniwob/html/core/jquery-ui/images/ui-icons_cc0000_256x240.png": "02891575d4358e9edde3e42d94057f8e9f82a9d64376f71ee86cef149d30537e",
+    "miniwob/html/core/jquery-ui/images/ui-icons_ffffff_256x240.png": "b6b06deef2b924cc3835d63f4883d47882734a33e71b212d917a68cede3b8e9d",
+    "miniwob/html/core/jquery-ui/jquery-ui.min.css": "ac1c8f94750b39b12327a5d0c56fdf946dabfb6d91e5d2a202879ff9a5d67e29",
+    "miniwob/html/core/jquery-ui/jquery-ui.min.js": "28ce75d953678c4942df47a11707a15e3c756021cf89090e3e6aa7ad6b6971c3",
+    "miniwob/html/miniwob/click-checkboxes.html": "b799bd1749dd603029e7479c56efceb38a425af47c04267fe46f6d7a64ac1895",
+    "miniwob/html/miniwob/click-checkboxes-soft.html": "2cf9530da48c9f87dd84318db17a1a617856e20312237f4964d78eef37a81b60",
+    "miniwob/html/miniwob/ascending-numbers.html": "685383d765b820c59c3b92c4b195d97e3822ea5f5a8219dc1ceb1c2dc6e0443f",
+    "miniwob/html/common/shapes.js": "0160839b9695cef26de53625170a3f4a01dbb6a474ec8fb81a4d6b058dc0d7c0"
+  }
+}

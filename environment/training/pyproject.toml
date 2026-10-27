@@ -1,0 +1,25 @@
+[project]
+name = "hrp-paper-training"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "hrp-controlled-miniwob",
+  "verl",
+  "torch==2.13.0",
+  "transformers>=5.10,<5.11",
+  "peft==0.20.0",
+  "fla-core==0.5.2",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+hrp-controlled-miniwob = { path = "..", editable = true }
+verl = { path = "../vendor/verl" }
+torch = { index = "pytorch-cu129" }
+
+[[tool.uv.index]]
+name = "pytorch-cu129"
+url = "https://download.pytorch.org/whl/cu129"
+explicit = true
