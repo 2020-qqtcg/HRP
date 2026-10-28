@@ -1,5 +1,11 @@
 # Your Policy Is Secretly a Harness: The Decision Geometry of Agent Interfaces
 
+<p align="center">
+  <a href="https://arxiv.org/abs/2610.37255">
+    <img src="https://img.shields.io/badge/arXiv-2610.37255-b31b1b.svg" alt="arXiv:2610.37255">
+  </a>
+</p>
+
 Research code for the paper, including controlled MiniWoB++ experiments and a
 five-harness coding-agent study on Terminal-Bench Lite.
 
